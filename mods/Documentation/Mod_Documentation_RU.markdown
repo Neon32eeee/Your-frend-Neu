@@ -41,7 +41,7 @@
     - Так же есть `rect` он используесть для тослеживания нажатия по обьекту но изночально он равет ___`None`___.
     - У обьекта созданого из класса наслетника `BaseObject` (`base_object`) есть функция `draw` она вы водит изображение обьекта на экран туда куда мы указали `pozition`.
 - Класс `BaseItemInStove`:
-    - У обьекта есть 6 переменых это `name`, `image`, `image_size`, `poziteon`, `add_count` которые мы передаём при создание обьекта и ток же есть `rect`. Вот пример создание обьекта `appel`
+    - У обьекта есть 6 переменых это `name`, `image`, `image_size`, `poziteon`, `add_count` которые мы передаём при создание обьекта и так же есть `rect`. Вот пример создание обьекта `appel`
         ```python
         import os
 
@@ -124,6 +124,29 @@
         game.register_draw_function(draw_gost)
         ```
 
+- __`game.create_rect`__:
+    - Она позваляет созтать хит-бокс для откслеживания нажатья по обьекту. Пример c `gost`:
+        ```python
+        import os
+
+        gost_Image_path = os.path.join("images", "gost_image.png")
+        game.load_image("gost_image", gost_image_path, ())
+
+        gost = base_odject(game.images["gost_image"], (500, 350))
+
+        game.regist_object("gost", gost)
+
+        def draw_gost():
+            gost.draw()
+
+        def register_click(event):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                game.stop()
+
+        game.register_draw_function(draw_gost)
+        game.regisrer_event_handler(register_click)
+        ```
+
 - __`game.get_objects`__:
     - Она восращает всё обьекты в `game.objects`. Пример с `gost`:
         ```python
@@ -143,6 +166,13 @@
 
         game.register_draw_function(draw_gost)
         ```
+
+- __`game.add_obj_inventory`__:
+    - Она посваляет добавить ключ и сначение в `inv.inventory`. Пример:
+        ```python
+        game.add_obj_invenyory("apple", 0)
+        ```
+
 - __`game.load_*`__:
     - Она позволяет загрузить в игру и получать список:
         - `game.load_image`:
@@ -172,3 +202,27 @@
                 ```
 - __`game.get_*`__:
     - Она возращает список изображений: `game.get_images`, звуков: `game.get_sounds`, шрифтов: `game.get_fonts`.
+
+- __`game.create_text`__:
+    - Она позваляет вывводить текст на экран. Пример:
+        ```python
+        def draw_num_hit():
+            game.create_text(f"num_hit:{game.neu.num_hit}", (100, 100), (0, 255, 0))
+
+        game.register_draw_function(draw_num_hit)
+        ```
+
+- __`game.draw_dialoge_win`__:
+    - Она позваляет отрисоватьдиалоговое окно с какимто сообщением. Пример:
+        ```python
+        def draw_hz():
+            game.draw_dialoge_win("Что-то там", (750, 250))
+
+        game.register_draw_function(draw_hz)
+        ```
+### Дополнение:
+через `game` так же можно получить доступ к `neu`, `dialoge`, `move_tab`, `us_name`, `stove`, `stove_GUI`, `inv`, `screen`, `clock` и `font`.
+
+---
+
+Что бы вы до конца розабрались можите почитать код игры.
