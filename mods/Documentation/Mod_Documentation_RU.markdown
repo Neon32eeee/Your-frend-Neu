@@ -125,7 +125,7 @@
         ```
 
 - __`game.get_objects`__:
-    - Она восращает всё обьекты в `game.objects`. Пример с `gast`:
+    - Она восращает всё обьекты в `game.objects`. Пример с `gost`:
         ```python
         import os
 
@@ -143,3 +143,32 @@
 
         game.register_draw_function(draw_gost)
         ```
+- __`game.load_*`__:
+    - Она позволяет загрузить в игру и получать список:
+        - `game.load_image`:
+            - #### Пример:
+                ```python
+                import os
+
+                apple_path = os.path.join("images","apple_image.png")
+                game.load_image("apple", apple_path, ())
+                ```
+            - Последнее значение это размер изображения если оставаить его пусты то размер не изменится, иначе изменится на то что нты написал.
+        - `game.load_sound`:
+            - ### Пример:
+                ```python
+                import os
+
+                bruh_path = os.path.join("sounds", "bruh.mp3")
+                game.load_sound("bruh", bruh_path)
+                ```
+        - `game.load_font`:
+            - ### Пример:
+                ```python
+                import os
+
+                my_font_path = os.path.join("fonts", "my_font.ttf")
+                game.load_font("my_font", my_font_path)
+                ```
+- __`game.get_*`__:
+    - Она возращает список изображений: `game.get_images`, звуков: `game.get_sounds`, шрифтов: `game.get_fonts`.
