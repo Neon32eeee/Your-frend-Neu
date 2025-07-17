@@ -39,6 +39,7 @@ class Game:
         self.sounds = {}
         self.fonts = {}
         self.objects = {}
+        self.mod_objects = {}
         # Регистрация модов
         self.mod_draw_functions = []
         self.mod_event_handlers = []
@@ -75,6 +76,14 @@ class Game:
         if handler not in self.mod_event_handlers:
             self.mod_event_handlers.append(handler)
 
+    def mod_draw(self, func):
+        self.register_draw_function(func)
+        return func
+
+    def mod_event(self, func):
+        self.register_event_handler(func)
+        return func
+
     def load_image(self, name, path, size):
         try:
             img = pygame.image.load(path)
@@ -104,10 +113,13 @@ class Game:
             print(f"Error load font {path}:{e}")
 
     def regist_object(self, name, object):
-        self.objects[name] = object
+        if self.mod_objects(name) not in self.mod_objects:
+            self.mod_objects[name] = object
+        else:
+            print(f"Object {name} already exists")
 
     def create_rect(self, name):
-        obj = self.objects.get(name)
+        obj = self.mod_objects.get(name)
         if obj is None:
             print(f"Данного обьекта с и не менем {name} существует!")
 
@@ -128,7 +140,7 @@ class Game:
         return self.fonts
     
     def get_object(self):
-        return self.objects
+        return self.mod_objects
 
     def create_text(self, text, pozition, color):
         text_render = font.render(text, True, color)

@@ -20,9 +20,20 @@
     - `BaseItemInStove`- это класс посваляет создовать стандартный обьект для изпользования его в качестве еды или другой веши для печки.
     - `Neu, Dialogue, MoveTable, User_Name, Stove, GUI_Stove`: Специализированные классы для игровых сущностей.
   
+- **Конфигоруционые файлы**:
+    Обезателно надо создать conf.json иначе код не будет работать. Вот шаблон для conf.json:
+    ```json
+        {
+        "name": "MyMod",
+        "version": 1,
+        "author": "None"
+        }
+    ```
+    Вы уже сами заполните его
+
 - **Сруктура файлов**:
     
-    Всё основной код вы должны писать в .py скрепре после создания мода помистите его в zip архив что-бы игра могла его прочитать так же вы можете помечтить в zip файл папки с текстурами, звуками, шифтами и т.д.
+    Всё основной код вы должны писать в .py скрепре после создания мода помистите его, ещё обезательно добавьте conf.json в zip архив что-бы игра могла их прочитать, так же вы можете помечтить в zip файл папки с текстурами, звуками, шифтами и т.д.
     Так же zip мода надопоместить в папку `mods`.
 
 ---
@@ -55,8 +66,8 @@
 ---
 
 ## 3. Функции `game`
-- __`game.register_draw_function`__:
-    - Она позволияет вставлять функцие с отображением картинок или что-то другое на экран. Пример c обьектом `gost`:
+- __`@game.mod_draw`__:
+    - Этот дикоратор позваляет делать функции с отображением картинок или что-то другое на экран. Пример c обьектом `gost`:
         ```python
         import os
 
@@ -65,16 +76,16 @@
 
         gost = base_odject(game.images["gost_image"], (500, 350))
 
+        @game.mod_draw
         def draw_gost():
             gost.draw()
-
-        game.register_draw_function(draw_gost)
         ```
 - __`game.register_event_handler`__:
-    - Она позволяет вставлять функцие с ивентами *__pygame__* например нажатие клавиши. Пример:
+    - Этот дикоратор позваляет делать функцие с ивентами *__pygame__* например нажатие клавиши. Пример:
         ```python
         import pygame
 
+        @game.mod_event
         def key_x_down(event):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_x:
@@ -98,12 +109,11 @@
         ```python
         import pygame
 
+        @game.mod_event
         def key_down(event):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
                     game.stop()
-        
-        game.register_event_handler(key_down)
         ```
 
 - __`game.regist_object`__:
@@ -118,10 +128,9 @@
 
         game.regist_object("gost", gost)
 
+        @game.mod_draw
         def draw_gost():
             gost.draw()
-
-        game.register_draw_function(draw_gost)
         ```
 
 - __`game.create_rect`__:
@@ -136,15 +145,16 @@
 
         game.regist_object("gost", gost)
 
+        @game.mod_draw
         def draw_gost():
             gost.draw()
 
+        @game.mod_event
         def register_click(event):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 game.stop()
 
         game.register_draw_function(draw_gost)
-        game.regisrer_event_handler(register_click)
         ```
 
 - __`game.get_objects`__:
@@ -159,12 +169,11 @@
 
         game.regist_object("gost", gost)
 
+        @game.mod_draw
         def draw_gost():
             objects = game.get_objects()
             if "gost" in objects:
                 gost.draw()
-
-        game.register_draw_function(draw_gost)
         ```
 
 - __`game.add_obj_inventory`__:
@@ -206,19 +215,17 @@
 - __`game.create_text`__:
     - Она позволяет вывводить текст на экран. Пример:
         ```python
+        @game.mod_draw
         def draw_num_hit():
             game.create_text(f"num_hit:{game.neu.num_hit}", (100, 100), (0, 255, 0))
-
-        game.register_draw_function(draw_num_hit)
         ```
 
 - __`game.draw_dialoge_win`__:
     - Она позволяет отрисоватьдиалоговое окно с какимто сообщением. Пример:
         ```python
+        @game.mod_draw
         def draw_hz():
             game.draw_dialoge_win("Что-то там", (750, 250))
-
-        game.register_draw_function(draw_hz)
         ```
 ### Дополнение:
 через `game` так же можно получить доступ к `neu`, `dialoge`, `move_tab`, `us_name`, `stove`, `stove_GUI`, `inv`, `screen`, `clock` и `font`.
