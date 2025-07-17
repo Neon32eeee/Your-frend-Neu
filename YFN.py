@@ -4,7 +4,7 @@ import time
 import os
 import zipfile
 import shutil
-
+import json
 
 pygame.init()
 class BaseObject():
@@ -184,6 +184,33 @@ def load_mods_from_folder():
                         print(f"В {zip_file} нет Python-скриптов.")
                         continue
 
+                    conf_file = [f for f in zip_ref.namelist() if f.endswith('.json')]
+                    if not conf_file:
+                        print(f"В {zip_file} нет конфугурационых файлов.")
+                        continue
+
+                    mod_info = {
+                        'name': 'Unknown',
+                        'version': 'Unknown',
+                        'author': 'Unknown'
+                    }
+                    
+                    for conf_file in conf_file:
+                        try:
+                            with open(os.path.join(temp_dir, conf_file), 'r', encoding='utf-8') as conf:
+                                config_data = json.load(conf)
+                                mod_info['name'] = config_data.get('name', 'Unknown')
+                                mod_info['version'] = config_data.get('version', 'Unknown')
+                                mod_info['author'] = config_data.get('author', 'Unknown')
+                                print(f"Имя мода: {mod_info['name']} (Версия: {mod_info['version']}, Автор: {mod_info['author']})")
+                        except json.JSONDecodeError as e:
+                            print(f"Ошибка при разборе {conf_file}: {str(e)}")
+                            continue
+                        except Exception as e:
+                            print(f"Ошибка при чтении {conf_file}: {str(e)}")
+                            continue
+                                
+
                     for py_file in py_files:
                         with open(os.path.join(temp_dir, py_file), 'r', encoding='utf-8') as file:
                             code = file.read()
@@ -202,13 +229,14 @@ def load_mods_from_folder():
                                 'screen': screen,
                                 'font': font,
                                 'mod_draw_functions': mod_draw_functions,
-                                'mod_event_handlers': mod_event_handlers,  # Добавлено для обработки событий
+                                'mod_event_handlers': mod_event_handlers,
                                 'os': os,
                                 'random': random,
                                 'time': time
                             }
                             exec(code, globals_dict)
                             print(f"Успешно загружен мод: {py_file} из {zip_file}")
+
                     
                     shutil.rmtree(temp_dir, ignore_errors=True)
             except Exception as e:
